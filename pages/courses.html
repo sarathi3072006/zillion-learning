@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Browse all Zillion Learning courses - Web Development, Programming, Digital Marketing, and more.">
+    <title>Courses - Zillion Learning</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/main.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🎓</text></svg>">
+</head>
+<body>
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="fas fa-graduation-cap"></i> Zillion<span>Learning</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="faculty.html">Faculty</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="testimonials.html">Testimonials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== PAGE HERO ==================== -->
+    <section class="hero" style="padding: 60px 0; min-height: 40vh;">
+        <div class="hero-content">
+            <h1>Explore Our Courses</h1>
+            <p>Discover 50+ carefully curated courses to accelerate your learning journey</p>
+        </div>
+    </section>
+
+    <!-- ==================== SEARCH & FILTER ==================== -->
+    <section style="padding: 40px 0; background-color: #f8f9fa;">
+        <div class="container">
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <input type="text" id="searchBox" placeholder="Search courses..." class="form-control">
+                </div>
+                <select id="filterSelect" class="filter-select">
+                    <option value="all">All Categories</option>
+                    <option value="web">Placement Training</option>
+                    <option value="programming">Aptitude Training</option>
+                    <option value="marketing">Interview prepration</option>
+                    <option value="data">Engineering Subjects</option>
+                    <option value="business">MBA Subjects</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== COURSES SECTION ==================== -->
+    <section>
+        <div class="container">
+            <div id="coursesContainer" class="row">
+                <!-- Course 1 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="course-card" data-category="web">
+                        <div class="course-image" style="background: linear-gradient(135deg, #0066cc 0%, #00c4ff 100%);"></div>
+                        <div class="course-content">
+                            <h5 class="course-title">Web Development Fundamentals</h5>
+                            <p class="course-description">Master HTML, CSS, JavaScript and build responsive websites from scratch.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 12 weeks</span>
+                                <span><i class="fas fa-users"></i> 234 students</span>
+                            </div>
+                            <div class="course-fee">$299</div>
+                            <button class="btn-enroll" onclick="alert('Enrolled in Web Development Fundamentals!')">
+                                <i class="fas fa-check-circle"></i> Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 2 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="course-card" data-category="programming">
+                        <div class="course-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                        <div class="course-content">
+                            <h5 class="course-title">Python Programming Basics</h5>
+                            <p class="course-description">Learn Python from basics to advanced concepts with hands-on projects.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 10 weeks</span>
+                                <span><i class="fas fa-users"></i> 189 students</span>
+                            </div>
+                            <div class="course-fee">$249</div>
+                            <button class="btn-enroll" onclick="alert('Enrolled in Python Programming Basics!')">
+                                <i class="fas fa-check-circle"></i> Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 3 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="course-card" data-category="marketing">
+                        <div class="course-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                        <div class="course-content">
+                            <h5 class="course-title">Digital Marketing 101</h5>
+                            <p class="course-description">Learn SEO, social media marketing, content strategy, and analytics.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 8 weeks</span>
+                                <span><i class="fas fa-users"></i> 156 students</span>
+                            </div>
+                            <div class="course-fee">$199</div>
+                            <button class="btn-enroll" onclick="alert('Enrolled in Digital Marketing 101!')">
+                                <i class="fas fa-check-circle"></i> Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 4 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="course-card" data-category="data">
+                        <div class="course-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                        <div class="course-content">
+                            <h5 class="course-title">Data Science Essentials</h5>
+                            <p class="course-description">Master data analysis, visualization, and machine learning fundamentals.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 14 weeks</span>
+                                <span><i class="fas fa-users"></i> 145 students</span>
+                            </div>
+                            <div class="course-fee">$349</div>
+                            <button class="btn-enroll" onclick="alert('Enrolled in Data Science Essentials!')">
+                                <i class="fas fa-check-circle"></i> Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 5 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="course-card" data-category="web">
+                        <div class="course-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+                        <div class="course-content">
+                            <h5 class="course-title">React.js Advanced</h5>
+                            <p class="course-description">Build modern, scalable applications with React and advanced JavaScript patterns.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 10 weeks</span>
+                                <span><i class="fas fa-users"></i> 167 students</span>
+                            </div>
+                            <div class="course-fee">$329</div>
+                            <button class="btn-enroll" onclick="alert('Enrolled in React.js Advanced!')">
+                                <i class="fas fa-check-circle"></i> Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 6 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="course-card" data-category="business">
+                        <div class="course-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                        <div class="course-content">
+                            <h5 class="course-title">Business Management</h5>
+                            <p class="course-description">Learn leadership, strategic planning, and organizational management skills.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 8 weeks</span>
+                                <span><i class="fas fa-users"></i> 123 students</span>
+                            </div>
+                            <div class="course-fee">$229</div>
+                            <button class="btn-enroll" onclick="alert('Enrolled in Business Management!')">
+                                <i class="fas fa-check-circle"></i> Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 7 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="course-card" data-category="programming">
+                        <div class="course-image" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);"></div>
+                        <div class="course-content">
+                            <h5 class="course-title">Java Programming</h5>
+                            <p class="course-description">Comprehensive Java course covering OOP, databases, and web development.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 12 weeks</span>
+                                <span><i class="fas fa-users"></i> 198 students</span>
+                            </div>
+                            <div class="course-fee">$279</div>
+                            <button class="btn-enroll" onclick="alert('Enrolled in Java Programming!')">
+                                <i class="fas fa-check-circle"></i> Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 8 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="course-card" data-category="marketing">
+                        <div class="course-image" style="background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);"></div>
+                        <div class="course-content">
+                            <h5 class="course-title">Content Marketing Strategy</h5>
+                            <p class="course-description">Master content creation, storytelling, and audience engagement strategies.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 6 weeks</span>
+                                <span><i class="fas fa-users"></i> 134 students</span>
+                            </div>
+                            <div class="course-fee">$179</div>
+                            <button class="btn-enroll" onclick="alert('Enrolled in Content Marketing Strategy!')">
+                                <i class="fas fa-check-circle"></i> Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Course 9 -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="course-card" data-category="data">
+                        <div class="course-image" style="background: linear-gradient(135deg, #2af598 0%, #009efd 100%);"></div>
+                        <div class="course-content">
+                            <h5 class="course-title">SQL & Database Design</h5>
+                            <p class="course-description">Learn database design, SQL queries, and optimization techniques.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 8 weeks</span>
+                                <span><i class="fas fa-users"></i> 112 students</span>
+                            </div>
+                            <div class="course-fee">$219</div>
+                            <button class="btn-enroll" onclick="alert('Enrolled in SQL & Database Design!')">
+                                <i class="fas fa-check-circle"></i> Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA SECTION ==================== -->
+    <section style="background: linear-gradient(135deg, #0066cc 0%, #00c4ff 100%); color: white; padding: 60px 0; text-align: center;">
+        <div class="container">
+            <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">Ready to Start Learning?</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem; opacity: 0.95;">Choose your course and begin your educational journey today</p>
+            <button class="btn-custom btn-secondary-custom" onclick="window.location.href='contact.html'">
+                <i class="fas fa-envelope"></i> Contact Us
+            </button>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5><i class="fas fa-graduation-cap"></i> Zillion Learning</h5>
+                    <p>Empowering learners with quality education.</p>
+                    <p style="opacity: 0.7; font-size: 0.9rem;">Learn Today, Lead Tomorrow</p>
+                </div>
+
+                <div class="footer-section">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h5>Categories</h5>
+                    <ul>
+                        <li><a href="#">Web Development</a></li>
+                        <li><a href="#">Programming</a></li>
+                        <li><a href="#">Digital Marketing</a></li>
+                        <li><a href="#">Data Science</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h5>Follow Us</h5>
+                    <div class="social-links">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Zillion Learning. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== SCROLL TO TOP BUTTON ==================== -->
+    <button id="scrollTopBtn" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="../js/main.js"></script>
+</body>
+</html>
