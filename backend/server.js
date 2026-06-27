@@ -3,8 +3,9 @@ const app = express();
 const PORT = 5000;
 const cors = require("cors");
 app.use(cors());
-let courses = require('./data/courses.json');
 app.use(express.json());
+let courses = require('./data/courses.json');
+
 
 app.get("/", (req, res) => {
     res.send("Hello from Zillion Learning Backend!");
