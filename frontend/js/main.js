@@ -232,7 +232,7 @@ function handleAdminLogin(e) {
 // ==================== DYNAMIC COURSE LOADING ====================
 async function loadCourses() {
   try {
-    const response = await fetch('../data/courses.json');
+    const response = await fetch('http://localhost:5000/courses');
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
