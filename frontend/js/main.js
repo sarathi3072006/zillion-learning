@@ -1,5 +1,5 @@
 /* =====================================================
-   BrightPath Academy - Main JavaScript
+   zillion learning - Main JavaScript
    Interactive Features and Functionality
    ===================================================== */
 
@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', function() {
   loadDarkModePreference();
   initializeCounters();
   initializeFormValidation();
+  initializeAdminAccess();
+  // Load courses if on courses page
+  if (document.getElementById('coursesContainer')) {
+    loadCourses();
+  }
 });
 
 // ==================== DARK MODE ====================
@@ -181,6 +186,92 @@ function handleFormSubmit(e) {
       formMessage.style.display = 'block';
     }
   }
+}
+
+// ==================== ADMIN PANEL ACCESS ====================
+function initializeAdminAccess() {
+  const form = document.getElementById('adminLoginForm');
+  if (form) {
+    form.addEventListener('submit', handleAdminLogin);
+  }
+}
+
+function handleAdminLogin(e) {
+  e.preventDefault();
+  const passwordInput = document.getElementById('adminPassword');
+  const errorMessage = document.getElementById('adminLoginError');
+  const adminLockScreen = document.getElementById('adminLockScreen');
+  const adminContent = document.getElementById('adminContent');
+  const ADMIN_PASSWORD = 'admin2026';
+  const enteredPassword = passwordInput?.value.trim() || '';
+
+  if (!enteredPassword) {
+    if (errorMessage) {
+      errorMessage.textContent = 'Please enter the admin password.';
+    }
+    return;
+  }
+
+  if (enteredPassword === ADMIN_PASSWORD) {
+    if (errorMessage) {
+      errorMessage.textContent = '';
+    }
+    if (adminLockScreen) {
+      adminLockScreen.style.display = 'none';
+    }
+    if (adminContent) {
+      adminContent.style.display = 'block';
+    }
+  } else {
+    if (errorMessage) {
+      errorMessage.textContent = 'Incorrect password. Please try again.';
+    }
+  }
+}
+
+// ==================== DYNAMIC COURSE LOADING ====================
+async function loadCourses() {
+  try {
+    const response = await fetch('../data/courses.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const courses = await response.json();
+    renderCourses(courses);
+  } catch (error) {
+    console.error('Error loading courses:', error);
+    document.getElementById('coursesContainer').innerHTML = '<p class="text-center">Error loading courses. Please refresh the page.</p>';
+  }
+}
+
+function renderCourses(courses) {
+  const container = document.getElementById('coursesContainer');
+  if (!container) return;
+
+  container.innerHTML = courses.map(course => `
+    <div class="col-lg-4 col-md-6 mb-4">
+      <div class="course-card" data-category="${course.category}">
+        <div class="course-image" style="background: ${course.gradient};"></div>
+        <div class="course-content">
+          <h5 class="course-title">${course.title}</h5>
+          <p class="course-description">${course.description}</p>
+          <div class="course-meta">
+            <span><i class="fas fa-clock"></i> ${course.duration}</span>
+            <span><i class="fas fa-users"></i> ${course.students} students</span>
+          </div>
+          <div class="course-fee">${course.fee}</div>
+          <button class="btn-enroll" onclick="alert('Enrolled in ${course.title}!')">
+            <i class="fas fa-check-circle"></i> Enroll Now
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Re-initialize enroll buttons and animations for dynamically loaded courses
+  initializeEnrollButtons();
+  initializeScrollReveal();
+  initializeSearchFilter();
 }
 
 // ==================== SEARCH AND FILTER ====================
