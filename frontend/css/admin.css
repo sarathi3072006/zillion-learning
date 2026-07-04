@@ -1,0 +1,86 @@
+/* =====================================================
+   Admin Page - CSS Stylesheet
+   Admin Panel Specific Styles
+   ===================================================== */
+
+/* ==================== ADMIN PAGE STYLES ==================== */
+
+#adminLockScreen.admin-lock-screen {
+  background: linear-gradient(135deg, var(--light-bg) 0%, #e9ecef 100%);
+  color: var(--text-dark);
+  padding: var(--section-padding) 0;
+  min-height: 70vh;
+}
+
+#adminLockScreen.admin-lock-screen .admin-card {
+  border-radius: 16px;
+  background: var(--card-bg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  color: var(--text-dark);
+}
+
+#adminLockScreen.admin-lock-screen .text-muted {
+  color: var(--text-light);
+}
+
+#adminLockScreen.admin-lock-screen .form-control {
+  background-color: var(--input-bg);
+  color: var(--text-dark);
+  border-color: var(--border-color);
+}
+
+/* Dark Mode - Admin Page Styles */
+body.dark-mode #adminLockScreen.admin-lock-screen {
+  background: linear-gradient(135deg, #111 0%, #222 100%);
+}
+
+body.dark-mode #adminContent,
+body.dark-mode #adminContent .card,
+body.dark-mode #adminContent .card-header,
+body.dark-mode #adminContent .card-body {
+  background-color: var(--surface-color) !important;
+}
+/* Dark Mode - Admin Content Boxes */
+body.dark-mode #adminContent .bg-white {
+  background-color: var(--surface-color) !important;
+}
+
+body.dark-mode #adminContent h5 {
+  color: var(--text-dark);
+}
+
+body.dark-mode #adminContent .text-muted {
+  color: var(--text-light) !important;
+}
+/* Admin Dashboard Navigation */
+#adminContent .nav-link {
+  color: var(--text-dark) !important;
+  font-weight: 500;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+#adminContent .nav-link:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color) !important;
+}
+body.dark-mode #adminContent .nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+#adminContent .nav-link.active {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+/* Dark Mode - Admin Navigation */
+body.dark-mode #adminContent .nav-link {
+  color: var(--text-dark) !important;
+}
+
+body.dark-mode #adminContent .nav-link.active {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+}
+.hidden {
+  display: none;
+}

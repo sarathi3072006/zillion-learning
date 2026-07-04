@@ -79,13 +79,6 @@ body.dark-mode .bg-white,
 body.dark-mode .card,
 body.dark-mode .card-header,
 body.dark-mode .card-body,
-body.dark-mode #adminContent,
-body.dark-mode #adminContent .card,
-body.dark-mode #adminContent .card-header,
-body.dark-mode #adminContent .card-body {
-  background-color: var(--surface-color) !important;
-}
-
 body.dark-mode .course-card,
 body.dark-mode .faculty-card,
 body.dark-mode .testimonial-card,
@@ -234,35 +227,6 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* ==================== ADMIN PAGE STYLES ==================== */
-#adminLockScreen.admin-lock-screen {
-  background: linear-gradient(135deg, var(--light-bg) 0%, #e9ecef 100%);
-  color: var(--text-dark);
-  padding: var(--section-padding) 0;
-  min-height: 70vh;
-}
-
-#adminLockScreen.admin-lock-screen .admin-card {
-  border-radius: 16px;
-  background: var(--card-bg);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-  color: var(--text-dark);
-}
-
-#adminLockScreen.admin-lock-screen .text-muted {
-  color: var(--text-light);
-}
-
-#adminLockScreen.admin-lock-screen .form-control {
-  background-color: var(--input-bg);
-  color: var(--text-dark);
-  border-color: var(--border-color);
-}
-
-body.dark-mode #adminLockScreen.admin-lock-screen {
-  background: linear-gradient(135deg, #111 0%, #222 100%);
 }
 
 .hero::before {
