@@ -2,13 +2,17 @@
    Zillion Learning - Admin JavaScript
    Admin Panel Functionality
    ===================================================== */
-
+//=====================IMPORT MODULES=====================
+import { showModal } from "./modules/ui.js";
+import { loadCategories } from "./modules/courses.js";
 // ==================== INITIALIZATION ====================
 function initAdmin() {
     initializeAdminAccess();
     initializeAddCourseToggle();
     initializeImagePreview();
     initializeAddCourse();
+    initializeAddCategory();
+    loadCategories('categorySelect'); // Load categories into the select dropdown
 }
 
 initAdmin();
@@ -121,7 +125,7 @@ function previewImage() {
 }
 
 
-// ==================== ADD COURSE ====================
+// ==================== INITIALIZE ADD COURSE ====================
 function initializeAddCourse() {
     const courseForm = document.getElementById("courseForm");
 
@@ -129,35 +133,39 @@ function initializeAddCourse() {
 
     courseForm.addEventListener("submit", addCourse);
 }
-
+// ==================== ADD COURSE ====================
 async function addCourse(e) {
     e.preventDefault();
 
     const title = document.getElementById("title").value.trim();
     const description = document.getElementById("description").value.trim();
-    const category = document.getElementById("category").value.trim();
+    const categoryId = parseInt(document.getElementById("categorySelect").value.trim());
     const duration = document.getElementById("duration").value.trim();
     const fee = document.getElementById("fee").value.trim();
 
     // Validation
     if (!title) {
-        alert("Please enter a course title.");
+        showModal("Please enter a course title.", "danger");
+        return;
+    }
+    if (!categoryId) {
+        showModal("Please select a category.", "danger");
         return;
     }
     if (!duration) {
-        alert("Please enter the course duration.");
+        showModal("Please enter the course duration.", "danger");
         return;
     }
 
     if (!fee) {
-        alert("Please enter the course fee.");
+        showModal("Please enter the course fee.", "danger");
         return;
     }
 
     const newCourse = {
         title,
         description,
-        category,
+        categoryId,
         duration,
         fee,
         image: ""
@@ -171,21 +179,72 @@ async function addCourse(e) {
             },
             body: JSON.stringify(newCourse)
         });
-
+        const data = await response.json();
         if (!response.ok) {
-            alert("Failed to add course.");
+            showModal(data.error || "Failed to add course.", "danger");
             return;
         }
-
-        const data = await response.json();
-
         console.log(data);
-        alert("Course added successfully!");
+        showModal("Course added successfully!", "success");
 
         e.target.reset();
 
     } catch (error) {
         console.error(error);
-        alert("Unable to connect to the server.");
+        showModal("Unable to connect to the server.", "danger");
+    }
+}
+
+
+// ==================== INITIALIZE ADD CATEGORY ====================
+function initializeAddCategory() {
+    const addCategoryForm = document.getElementById("addCategoryForm");
+    if (!addCategoryForm) return;
+    addCategoryForm.addEventListener("submit", addCategory);
+}
+
+// ==================== ADD CATEGORY ====================
+async function addCategory(e) {
+    e.preventDefault();
+
+    const newCategory = document.getElementById("newCategoryInput").value.trim();
+    const addCategoryBtn = document.getElementById("addCategoryBtn");
+    if (!newCategory) {
+        showModal("Please enter a category name.", "danger");
+        return;
+    }
+    addCategoryBtn.disabled = true;
+    addCategoryBtn.textContent = "Adding...";
+    try {
+        const response = await fetch("http://localhost:5000/categories", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name: newCategory })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            showModal(data.error || "Failed to add category.", "danger");
+            return;
+        }
+
+        console.log(data);
+        showModal("Category added successfully!", "success");
+        await loadCategories();
+
+        // Clear the input field
+        document.getElementById("newCategoryInput").value = "";
+
+        // Close the modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById("addCategoryModal"));
+        modal.hide();
+
+    } catch (error) {
+        console.error(error);
+        showModal("Unable to connect to the server.", "danger");
+    }finally {
+        addCategoryBtn.disabled = false;
+        addCategoryBtn.textContent = "Add Category";
     }
 }

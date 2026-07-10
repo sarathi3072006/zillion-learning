@@ -2,7 +2,9 @@
    zillion learning - Main JavaScript
    Interactive Features and Functionality
    ===================================================== */
-
+//=====================IMPORT MODULES=====================
+import { loadCourses,initializeSearchFilter,loadCategories } from "./modules/courses.js";
+import { showLoadingAnimation, hideLoadingAnimation, showModal, initializeScrollReveal } from "./modules/ui.js";
 // ==================== INITIALIZATION ====================
 function initApp() {
   initializeDarkMode();
@@ -17,14 +19,16 @@ function initApp() {
   initializeClock();
   initializeRatings();
   initializeKeyboardShortcuts();
-
+  //================ MODULE FUNCTIONS=================
+  // course page specific functions
   if (document.getElementById('coursesContainer')) {
     loadCourses();
+    loadCategories('filterSelect'); // Load categories into the select dropdown
+    initializeSearchFilter();
   }
 }
 
 initApp();
-
 
 // ==================== DARK MODE ====================
 function initializeDarkMode() {
@@ -147,95 +151,10 @@ function initializeFormValidation() {
 }
 
 
-// ==================== DYNAMIC COURSE LOADING ====================
-async function loadCourses() {
-  try {
-    const response = await fetch('http://localhost:5000/courses');
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const courses = await response.json();
-    renderCourses(courses);
-  } catch (error) {
-    console.error('Error loading courses:', error);
-    document.getElementById('coursesContainer').innerHTML = '<p class="text-center">Error loading courses. Please refresh the page.</p>';
-  }
-}
-
-function renderCourses(courses) {
-  const container = document.getElementById('coursesContainer');
-  if (!container) return;
-
-  container.innerHTML = courses.map(course => `
-    <div class="col-lg-4 col-md-6 mb-4">
-      <div class="course-card" data-category="${course.category}">
-        <div class="course-image" style="background: ${course.gradient};"></div>
-        <div class="course-content">
-          <h5 class="course-title">${course.title}</h5>
-          <p class="course-description">${course.description}</p>
-          <div class="course-meta">
-            <span><i class="fas fa-clock"></i> ${course.duration}</span>
-          </div>
-          <div class="course-fee">${course.fee}</div>
-          <button class="btn-enroll" onclick="alert('Enrolled in ${course.title}!')">
-            <i class="fas fa-check-circle"></i> Enroll Now
-          </button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-
-  // Re-initialize enroll buttons and animations for dynamically loaded courses
-  initializeEnrollButtons();
-  initializeScrollReveal();
-  initializeSearchFilter();
-}
 
 
-// ==================== SEARCH AND FILTER ====================
-function initializeSearchFilter() {
-  const searchBox = document.getElementById('searchBox');
-  const filterSelect = document.getElementById('filterSelect');
-  const courseCards = document.querySelectorAll('.course-card');
-
-  if (!searchBox || !filterSelect || courseCards.length === 0) return;
-
-  function filterCourses() {
-    const searchTerm = searchBox?.value.toLowerCase() || '';
-    const selectedFilter = filterSelect?.value || 'all';
-
-    courseCards.forEach(card => {
-      const title = card.querySelector('.course-title')?.textContent.toLowerCase() || '';
-      const category = card.dataset.category || 'all';
-
-      const matchesSearch = title.includes(searchTerm);
-      const matchesFilter = selectedFilter === 'all' || category === selectedFilter;
-
-      card.style.display = (matchesSearch && matchesFilter) ? 'block' : 'none';
-    });
-  }
-
-  searchBox?.addEventListener('input', filterCourses);
-  filterSelect?.addEventListener('change', filterCourses);
-}
 
 
-// ==================== LOADING ANIMATION ====================
-function showLoadingAnimation() {
-  const btn = document.querySelector('.btn-submit');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading"></span> Submitting...';
-  }
-}
-
-function hideLoadingAnimation() {
-  const btn = document.querySelector('.btn-submit');
-  if (btn) {
-    btn.disabled = false;
-    btn.innerHTML = 'Send Message';
-  }
-}
 
 
 // ==================== NAVBAR TRANSPARENCY ON SCROLL ====================
@@ -261,64 +180,7 @@ function initializePageLoadAnimation() {
 }
 
 
-// ==================== UTILITY FUNCTIONS ====================
-function showModal(message, type = 'info') {
-  const modal = document.createElement('div');
-  modal.className = `alert alert-${type} alert-dismissible fade show`;
-  modal.setAttribute('role', 'alert');
-  modal.innerHTML = `
-    ${message}
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  `;
 
-  const container = document.querySelector('.container:first-of-type');
-  if (container) {
-    container.insertBefore(modal, container.firstChild);
-
-    setTimeout(() => {
-      modal.remove();
-    }, 3000);
-  }
-}
-
-
-// ==================== ENROLL BUTTON FUNCTIONALITY ====================
-function initializeEnrollButtons() {
-  const enrollButtons = document.querySelectorAll('.btn-enroll');
-
-  enrollButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.preventDefault();
-      const courseName = this.closest('.course-card')?.querySelector('.course-title')?.textContent;
-
-      if (courseName) {
-        // Simulate enrollment
-        showLoadingAnimation();
-        setTimeout(() => {
-          hideLoadingAnimation();
-          showModal(`You have successfully enrolled in "${courseName}"!`, 'success');
-        }, 1500);
-      }
-    });
-  });
-}
-
-
-// ==================== REVEAL ON SCROLL ANIMATION ====================
-function initializeScrollReveal() {
-  const elements = document.querySelectorAll('.course-card, .faculty-card, .feature-box, .testimonial-card');
-
-  const observer = new IntersectionObserver(function(entries) {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  elements.forEach(element => observer.observe(element));
-}
 
 
 // ==================== EVENT LISTENERS ====================

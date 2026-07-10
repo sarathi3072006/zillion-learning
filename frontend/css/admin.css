@@ -84,3 +84,33 @@ body.dark-mode #adminContent .nav-link.active {
 .hidden {
   display: none;
 }
+
+/* Dark Mode - Modal Styles */
+body.dark-mode .modal-content {
+    background-color: #1e1e1e;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+    border-color: #444;
+}
+
+body.dark-mode .modal-title {
+    color: white;
+}
+
+body.dark-mode .modal .form-control {
+    background-color: #2b2b2b;
+    color: white;
+    border-color: #555;
+}
+
+body.dark-mode .modal .form-control::placeholder {
+    color: #aaa;
+}
+
+body.dark-mode .btn-close {
+    filter: invert(1);
+}
