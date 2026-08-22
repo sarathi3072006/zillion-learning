@@ -3,16 +3,27 @@
    Admin Panel Functionality
    ===================================================== */
 //=====================IMPORT MODULES=====================
+import config from "./modules/config.js";
 import { showModal } from "./modules/ui.js";
 import { loadCategories } from "./modules/courses.js";
+
+let courses = [];
+let editingCourseId = null;
 // ==================== INITIALIZATION ====================
 function initAdmin() {
+    // Build the edit form first so it receives the same category options as the add form.
+    reuseAddCourseFieldsInEditModal();
     initializeAdminAccess();
-    initializeAddCourseToggle();
+    initializeCourseSectionToggle();
     initializeImagePreview();
     initializeAddCourse();
     initializeAddCategory();
-    loadCategories('categorySelect'); // Load categories into the select dropdown
+    initializeCourseDelete();
+    initializeCourseEdit();
+    initializeEditCourseForm();
+    loadCategories();
+    loadcourses();
+    initializeAdminNavigation();
 }
 
 initAdmin();
@@ -27,40 +38,46 @@ function initializeAdminAccess() {
     form.addEventListener("submit", handleAdminLogin);
 }
 
-function handleAdminLogin(e) {
+async function handleAdminLogin(e) {
     e.preventDefault();
 
     const passwordInput = document.getElementById("adminPassword");
     const errorMessage = document.getElementById("adminLoginError");
-    const adminLockScreen = document.getElementById("adminLockScreen");
-    const adminContent = document.getElementById("adminContent");
 
-    const ADMIN_PASSWORD = "admin2026";
+
     const enteredPassword = passwordInput?.value.trim() || "";
-
     if (!enteredPassword) {
         if (errorMessage) {
             errorMessage.textContent = "Please enter the admin password.";
         }
         return;
     }
-
-    if (enteredPassword === ADMIN_PASSWORD) {
-        if (errorMessage) {
-            errorMessage.textContent = "";
+    try {
+        const response = await fetch(`${config.API_URL}/admin/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                password: enteredPassword
+            })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            showModal(data.error || "Failed to login.", "danger");
+            return;
         }
-
-        adminLockScreen?.classList.add("hidden");
-        adminContent?.classList.remove("hidden");
-
-        initializeAdminNavigation();
-    } else {
+        console.log(data);
+        showModal("Admin logged in successfully!", "success");
+    } catch (error) {
+        console.error(error);
         if (errorMessage) {
-            errorMessage.textContent = "Incorrect password. Please try again.";
+            errorMessage.textContent = "Unable to connect to the server.";
         }
+        return;
     }
-}
 
+}
 
 // ==================== ADMIN NAVIGATION ====================
 function initializeAdminNavigation() {
@@ -90,24 +107,29 @@ function initializeAdminNavigation() {
         });
     });
 }
-
-
-// ==================== ADD COURSE TOGGLE ====================
-function initializeAddCourseToggle() {
+//==================== COURSE SECTION TOGGLE ====================
+function initializeCourseSectionToggle() {
     const showAddCourseBtn = document.getElementById("showAddCourseBtn");
+    const manageCoursesBtn = document.getElementById("manageCoursesBtn");
     const addCourseSection = document.getElementById("addCoursesec");
+    const manageCoursesSection = document.getElementById("manageCoursesSec");
 
-    if (!showAddCourseBtn || !addCourseSection) return;
+    if (!showAddCourseBtn || !manageCoursesBtn || !addCourseSection || !manageCoursesSection) return;
 
     showAddCourseBtn.addEventListener("click", () => {
-        addCourseSection.classList.toggle("hidden");
+        addCourseSection.classList.remove("hidden");
+        manageCoursesSection.classList.add("hidden");
+    });
+
+    manageCoursesBtn.addEventListener("click", () => {
+        manageCoursesSection.classList.remove("hidden");
+        addCourseSection.classList.add("hidden");
     });
 }
 
-
 // ==================== IMAGE PREVIEW ====================
 function initializeImagePreview() {
-    const imageInput = document.getElementById("image");
+    const imageInput = document.querySelector("#courseForm [name='image']");
 
     if (!imageInput) return;
 
@@ -115,10 +137,10 @@ function initializeImagePreview() {
 }
 
 function previewImage() {
-    const imagePreview = document.getElementById("imagePreview");
+    const imagePreview = this.closest("form")?.querySelector(".image-preview");
     const file = this.files[0];
 
-    if (!file) return;
+    if (!file || !imagePreview) return;
 
     imagePreview.src = URL.createObjectURL(file);
     imagePreview.classList.remove("hidden");
@@ -136,13 +158,7 @@ function initializeAddCourse() {
 // ==================== ADD COURSE ====================
 async function addCourse(e) {
     e.preventDefault();
-
-    const title = document.getElementById("title").value.trim();
-    const description = document.getElementById("description").value.trim();
-    const categoryId = parseInt(document.getElementById("categorySelect").value.trim());
-    const duration = document.getElementById("duration").value.trim();
-    const fee = document.getElementById("fee").value.trim();
-
+    const { title, description, categoryId, duration, fee, image } = getCourseFormValues(e.currentTarget);
     // Validation
     if (!title) {
         showModal("Please enter a course title.", "danger");
@@ -162,22 +178,22 @@ async function addCourse(e) {
         return;
     }
 
-    const newCourse = {
-        title,
-        description,
-        categoryId,
-        duration,
-        fee,
-        image: ""
-    };
+    // FormData is required to submit the optional image file with the text fields.
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("categoryId", categoryId);
+    formData.append("duration", duration);
+    formData.append("fee", fee);
+
+    if (image) {
+        formData.append("image", image);
+    }
 
     try {
-        const response = await fetch("http://localhost:5000/courses", {
+        const response = await fetch(`${config.API_URL}/courses`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(newCourse)
+            body: formData
         });
         const data = await response.json();
         if (!response.ok) {
@@ -186,7 +202,7 @@ async function addCourse(e) {
         }
         console.log(data);
         showModal("Course added successfully!", "success");
-
+        await loadcourses();
         e.target.reset();
 
     } catch (error) {
@@ -216,12 +232,13 @@ async function addCategory(e) {
     addCategoryBtn.disabled = true;
     addCategoryBtn.textContent = "Adding...";
     try {
-        const response = await fetch("http://localhost:5000/categories", {
+        const response = await fetch(`${config.API_URL}/categories`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ name: newCategory })
+
         });
         const data = await response.json();
         if (!response.ok) {
@@ -243,8 +260,187 @@ async function addCategory(e) {
     } catch (error) {
         console.error(error);
         showModal("Unable to connect to the server.", "danger");
-    }finally {
+    } finally {
         addCategoryBtn.disabled = false;
         addCategoryBtn.textContent = "Add Category";
     }
+}
+// ==================== LOAD COURSES BEFORE RENDERING ====================
+async function loadcourses() {
+    try {
+        const response = await fetch(`${config.API_URL}/courses`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        courses = await response.json();
+        rendercoursetable(courses);
+    } catch (error) {
+        console.error("Error loading courses:", error);
+    }
+}
+// ==================== RENDER COURSE TABLE ====================
+function rendercoursetable(courses) {
+    const coursesTableBody = document.getElementById("coursesTableBody");
+    if (!coursesTableBody) return;
+    coursesTableBody.innerHTML = "";
+    courses.forEach(course => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td><img
+                src="${config.API_URL}/uploads/course-images/${course.image}"
+                alt="${course.title}"
+                class="course-image">
+            </td>
+            <td>${course.title}</td>
+            <td>${course.description}</td>
+            <td>${course.category.name}</td>
+            <td>${course.duration}</td>
+            <td>₹${course.fee}</td>
+            <td>
+                <button class="btn btn-sm btn-warning edit-course" data-id="${course.id}">Edit</button>
+                <button class="btn btn-sm btn-danger delete-course" data-id="${course.id}">Delete</button>
+            </td>
+        `;
+        coursesTableBody.appendChild(row);
+    });
+}
+//==================== INITIALIZE COURSE DELETE ====================
+function initializeCourseDelete() {
+    const coursesTableBody = document.getElementById("coursesTableBody");
+    if (!coursesTableBody) return;
+
+    coursesTableBody.addEventListener("click", async (e) => {
+        if (e.target.classList.contains("delete-course")) {
+            console.log("Delete button clicked for course ID:", e.target.dataset.id);
+            deleteCourse(e.target.dataset.id);
+        }
+    });
+}
+//==================== DELETE COURSE ====================
+async function deleteCourse(courseId) {
+    if (!confirm("Are you sure you want to delete this course?")) return;
+    try {
+        const response = await fetch(`${config.API_URL}/courses/${courseId}`, {
+            method: "DELETE"
+        });
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || "Failed to delete course.");
+        }
+        showModal("Course deleted successfully!", "success");
+        await loadcourses(); // Refresh the course list after deletion
+    } catch (error) {
+        console.error(error);
+        showModal(error.message, "danger");
+    }
+}
+//==================== INITIALIZE COURSE EDIT ====================
+function initializeCourseEdit() {
+    const courseTableBody = document.getElementById("coursesTableBody");
+    if (!courseTableBody) return;
+    courseTableBody.addEventListener("click", (e) => {
+        if (e.target.classList.contains("edit-course")) {
+            openEditCourse(e.target.dataset.id);
+        }
+    });
+}
+//==================== OPEN EDIT COURSE MODAL ====================
+function openEditCourse(courseId) {
+    const course = courses.find(c => c.id == courseId);
+    if (!course) return;
+
+    editingCourseId = course.id;
+    const form = document.getElementById("editCourseForm");
+    form.reset();
+
+    // A field is prefilled when its name matches a property returned by the API.
+    Object.entries(course).forEach(([key, value]) => {
+        const field = form.elements[key];
+
+        // Skip data that does not have a matching field, file inputs, and empty values.
+        if (!field || field.type === "file" || value == null) return;
+
+        field.value = value;
+    });
+
+    bootstrap.Modal.getOrCreateInstance(document.getElementById("editCourseModal")).show();
+}
+//==================== INITIALIZE EDIT COURSE FORM ====================
+function initializeEditCourseForm() {
+    const editCourseForm = document.getElementById("editCourseForm");
+    if (!editCourseForm) return;
+
+    editCourseForm.addEventListener("submit", updateCourse);
+    document.getElementById("editCourseModal")?.addEventListener("hidden.bs.modal", () => {
+        editCourseForm.reset();
+        editingCourseId = null;
+    });
+}
+//==================== UPDATE COURSE ====================
+async function updateCourse(e) {
+    e.preventDefault();
+    if (!editingCourseId) return;
+
+    const { title, description, categoryId, duration, fee, image } = getCourseFormValues(e.currentTarget);
+
+    if (!title || !categoryId || !duration || !fee) {
+        showModal("Please complete all required course fields.", "danger");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("categoryId", categoryId);
+    formData.append("duration", duration);
+    formData.append("fee", fee);
+    if (image) formData.append("image", image);
+
+    try {
+        const response = await fetch(`${config.API_URL}/courses/${editingCourseId}`, {
+            method: "PUT",
+            body: formData
+        });
+        const data = await response.json();
+        if (!response.ok) {
+            showModal(data.error || "Failed to update course.", "danger");
+            return;
+        }
+
+        bootstrap.Modal.getInstance(document.getElementById("editCourseModal"))?.hide();
+        showModal("Course updated successfully!", "success");
+        await loadcourses();
+    } catch (error) {
+        console.error(error);
+        showModal("Unable to connect to the server.", "danger");
+    }
+}
+
+function reuseAddCourseFieldsInEditModal() {
+    const addForm = document.getElementById("courseForm");
+    const modalBody = document.querySelector("#editCourseForm .modal-body");
+    if (!addForm || !modalBody) return;
+
+    // Only direct .mb-3 children are reusable course fields; submit buttons and nested modals stay behind.
+    const fields = [...addForm.querySelectorAll(":scope > .mb-3")].map(field => field.cloneNode(true));
+    fields.forEach(field => {
+        // IDs must remain unique. The cloned fields use their name attributes through form.elements instead.
+        field.querySelectorAll("[id]").forEach(element => element.removeAttribute("id"));
+        field.querySelectorAll("label[for]").forEach(label => label.removeAttribute("for"));
+        field.querySelector(".image-preview")?.classList.add("hidden");
+    });
+
+    modalBody.replaceChildren(...fields);
+}
+
+function getCourseFormValues(form) {
+    // Reading through form.elements keeps add and edit fields independent despite sharing field names.
+    return {
+        title: form.elements.title.value.trim(),
+        description: form.elements.description.value.trim(),
+        categoryId: parseInt(form.elements.categoryId.value, 10),
+        duration: form.elements.duration.value.trim(),
+        fee: form.elements.fee.value.trim(),
+        image: form.elements.image.files[0]
+    };
 }

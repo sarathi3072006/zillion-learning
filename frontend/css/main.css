@@ -2,7 +2,9 @@
    zillion learning - Main CSS Stylesheet
    Modern Educational Website Design
    ===================================================== */
-
+.hidden {
+  display: none !important;
+}
 :root {
   --primary-color: #0066cc;
   --primary-dark: #0052a3;
@@ -20,6 +22,7 @@
   --dark-muted: #b0b0b0;
   --text-light: #6c757d;
   --text-dark: #212529;
+  --text-white: #ffffff;
   --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
@@ -141,6 +144,7 @@ body {
 
 /* Respect reduced-motion preference: kill decorative animation & easing transitions */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -444,8 +448,15 @@ body.dark-mode .section-light {
 .course-image,
 .faculty-image {
   width: 100%;
+  height: 150px;
   object-fit: cover;
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+.course-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 /* ==================== COURSE CARDS ==================== */
@@ -731,6 +742,7 @@ body.dark-mode .accordion-body {
     opacity: 0;
     transform: translateY(-30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -742,6 +754,7 @@ body.dark-mode .accordion-body {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -752,6 +765,7 @@ body.dark-mode .accordion-body {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -762,6 +776,7 @@ body.dark-mode .accordion-body {
     opacity: 0;
     transform: translateX(-50px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -773,6 +788,7 @@ body.dark-mode .accordion-body {
     opacity: 0;
     transform: translateX(50px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -780,9 +796,12 @@ body.dark-mode .accordion-body {
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.7;
   }
@@ -792,6 +811,7 @@ body.dark-mode .accordion-body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -946,13 +966,15 @@ body.dark-mode .accordion-body {
   gap: var(--space-5);
   align-items: center;
 }
+
 .stats-section .section-title h2 {
-    color: white;
+  color: white;
 }
 
 .stats-section .section-title p {
-    color: #d9e8ff;
+  color: #d9e8ff;
 }
+
 @media (max-width: 768px) {
   .about-content {
     grid-template-columns: 1fr;

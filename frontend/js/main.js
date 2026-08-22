@@ -3,21 +3,24 @@
    Interactive Features and Functionality
    ===================================================== */
 //=====================IMPORT MODULES=====================
-import { loadCourses,initializeSearchFilter,loadCategories } from "./modules/courses.js";
+import { loadCourses, initializeSearchFilter, loadCategories } from "./modules/courses.js";
 import { showLoadingAnimation, hideLoadingAnimation, showModal, initializeScrollReveal } from "./modules/ui.js";
+import { initializeLoginPage } from "./modules/login.js";
+import { initializeNavbarScrollEffect, initializeEventListeners } from "./modules/navbar.js";
 // ==================== INITIALIZATION ====================
 function initApp() {
+  //dark mode
   initializeDarkMode();
   loadDarkModePreference();
-
+  //scroll
   initializeScrollTop();
   initializeSmoothScrolling();
+  //
   initializeCounters();
-  initializeNavbarScrollEffect();
   initializePageLoadAnimation();
-  initializeEventListeners();
   initializeClock();
   initializeRatings();
+  //keyboard shortcuts
   initializeKeyboardShortcuts();
   //================ MODULE FUNCTIONS=================
   // course page specific functions
@@ -26,6 +29,13 @@ function initApp() {
     loadCategories('filterSelect'); // Load categories into the select dropdown
     initializeSearchFilter();
   }
+  // login page specific functions
+  if (document.getElementById('loginForm')&&document.getElementById('signupForm')) {
+    initializeLoginPage();
+  }
+  // navbar specific functions
+  initializeNavbarScrollEffect();
+  initializeEventListeners();
 }
 
 initApp();
@@ -66,7 +76,7 @@ function updateDarkModeIcon() {
 function initializeScrollTop() {
   const scrollTopBtn = document.getElementById('scrollTopBtn');
 
-  window.addEventListener('scroll', function() {
+  window.addEventListener('scroll', function () {
     if (window.pageYOffset > 300) {
       scrollTopBtn?.classList.add('show');
     } else {
@@ -88,7 +98,7 @@ function scrollToTop() {
 // ==================== SMOOTH SCROLLING ====================
 function initializeSmoothScrolling() {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
+    anchor.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
       if (href !== '#' && document.querySelector(href)) {
         e.preventDefault();
@@ -111,7 +121,7 @@ function initializeCounters() {
     threshold: 0.5
   };
 
-  const observer = new IntersectionObserver(function(entries) {
+  const observer = new IntersectionObserver(function (entries) {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const counter = entry.target;
@@ -157,24 +167,12 @@ function initializeFormValidation() {
 
 
 
-// ==================== NAVBAR TRANSPARENCY ON SCROLL ====================
-function initializeNavbarScrollEffect() {
-  window.addEventListener('scroll', function() {
-    const navbar = document.querySelector('.navbar');
-    if (navbar) {
-      if (window.pageYOffset > 50) {
-        navbar.style.boxShadow = '0 0.5rem 1rem rgba(0, 0, 0, 0.15)';
-      } else {
-        navbar.style.boxShadow = '0 0.5rem 1rem rgba(0, 0, 0, 0.15)';
-      }
-    }
-  });
-}
+
 
 
 // ==================== PAGE LOADING ANIMATION ====================
 function initializePageLoadAnimation() {
-  window.addEventListener('load', function() {
+  window.addEventListener('load', function () {
     document.body.style.opacity = '1';
   });
 }
@@ -183,20 +181,7 @@ function initializePageLoadAnimation() {
 
 
 
-// ==================== EVENT LISTENERS ====================
-function initializeEventListeners() {
-  // Close mobile navbar when a link is clicked
-  const navbarLinks = document.querySelectorAll('.navbar-collapse a');
-  const navbarToggle = document.querySelector('.navbar-toggler');
 
-  navbarLinks.forEach(link => {
-    link.addEventListener('click', function() {
-      if (navbarToggle && window.getComputedStyle(navbarToggle).display !== 'none') {
-        navbarToggle.click();
-      }
-    });
-  });
-}
 
 
 // ==================== LIVE CLOCK ====================
@@ -221,7 +206,7 @@ function initializeRatings() {
   const stars = document.querySelectorAll('.rating-star');
 
   stars.forEach(star => {
-    star.addEventListener('click', function() {
+    star.addEventListener('click', function () {
       const rating = this.dataset.rating;
       const container = this.closest('.rating-container');
 
@@ -239,7 +224,7 @@ function initializeRatings() {
 
 // ==================== KEYBOARD SHORTCUTS ====================
 function initializeKeyboardShortcuts() {
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function (e) {
     // Press 'D' to toggle dark mode
     if (e.key.toLowerCase() === 'd' && e.altKey) {
       toggleDarkMode();

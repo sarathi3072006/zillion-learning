@@ -1,5 +1,8 @@
 const express = require('express');
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const authenticateToken = require("./middleware/authentication");
+const authorizeRole = require("./middleware/authorization");
 const app = express();
 const PORT = 5000;
 const cors = require("cors");
@@ -9,8 +12,14 @@ const prisma = require("./prismaClient");
 const upload = require("./config/multer");
 const fs = require("fs");
 const path = require("path"); app.use("/uploads", express.static("uploads"));
-app.get("/", (req, res) => {
-    res.send("Hello from Zillion Learning Backend!");
+//====================  TESTING ENDPOINT ====================
+app.get("/protected", authenticateToken, (req, res) => {
+
+    res.json({
+        message: "You are authenticated!",
+        user: req.user
+    });
+
 });
 // ==================== COURSES ENDPOINTS ====================
 app.get("/courses", async (req, res) => {
@@ -23,7 +32,7 @@ app.get("/courses", async (req, res) => {
     }
 });
 
-app.post("/courses", upload.single("image"), async (req, res) => {
+app.post("/courses",authenticateToken,authorizeRole,upload.single("image"), async (req, res) => {
     const { title, description, duration, fee } = req.body;
     const categoryId = parseInt(req.body.categoryId, 10);
     const image = req.file ? req.file.filename : null;
@@ -49,7 +58,7 @@ app.post("/courses", upload.single("image"), async (req, res) => {
     }
 });
 // ==================== UPDATE COURSE ENDPOINT ====================
-app.put("/courses/:id", upload.single("image"), async (req, res) => {
+app.put("/courses/:id", authenticateToken, authorizeRole, upload.single("image"), async (req, res) => {
     const courseId = parseInt(req.params.id, 10);
     const { title, description, duration, fee } = req.body;
     const categoryId = parseInt(req.body.categoryId, 10);
@@ -96,7 +105,7 @@ app.get("/categories", async (req, res) => {
 });
 
 
-app.post("/categories", async (req, res) => {
+app.post("/categories", authenticateToken, authorizeRole, async (req, res) => {
     const { name } = req.body;
     if (!name || name.trim() === "") {
         return res.status(400).json({ error: "Category name is required" });
@@ -120,7 +129,7 @@ app.post("/categories", async (req, res) => {
 });
 
 //==================== DELETE COURSE ENDPOINT ====================
-app.delete("/courses/:id", async (req, res) => {
+app.delete("/courses/:id",authenticateToken,authorizeRole, async (req, res) => {
     const courseId = parseInt(req.params.id, 10);
     try {
         const course = await prisma.course.findUnique({
@@ -150,7 +159,7 @@ app.delete("/courses/:id", async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-
+//==================== SIGNUP ENDPOINT ====================
 app.post("/signup", async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -177,6 +186,42 @@ app.post("/signup", async (req, res) => {
     }
 });
 
+//==================== LOGIN ENDPOINT ====================
+app.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+        const User = await prisma.user.findUnique({
+            where: { email }
+        });
+        if (!User) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        const validPassword = await bcrypt.compare(password, User.password);
+        if (!validPassword) {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+        const token = jwt.sign(
+            {
+                userId: User.id,
+                role: User.role
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "1h"
+            }
+        );
+        res.status(200).json({ message: "Login successful",token });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
+//================================================================================
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -1,10 +1,11 @@
 
 // ==================== IMPORT MODULES ====================
+import config from "./config.js";
 import { showLoadingAnimation, hideLoadingAnimation, showModal, initializeScrollReveal } from "./ui.js";
 // ==================== DYNAMIC COURSE LOADING ====================
 export async function loadCourses() {
   try {
-    const response = await fetch('http://localhost:5000/courses');
+    const response = await fetch(`${config.API_URL}/courses`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -20,59 +21,66 @@ function renderCourses(courses) {
   const container = document.getElementById('coursesContainer');
   if (!container) return;
 
-  container.innerHTML = courses.map(course => `
+  container.innerHTML = courses.map(course =>{
+    const imageUrl = course.image ? `${config.API_URL}/uploads/course-images/${course.image}` : null;
+   return `
     <div class="col-lg-4 col-md-6 mb-4">
       <div class="course-card" data-category="${course.category.name}">
-        <div class="course-image" style="background: ${course.gradient};"></div>
+      ${imageUrl 
+       ?
+       `<div class="course-image"><img src="${imageUrl}" alt="${course.title}"></div>` 
+       : 
+       `<div class="course-image" style="background: ${course.gradient};"></div>`
+      }
         <div class="course-content">
           <h5 class="course-title">${course.title}</h5>
           <p class="course-description">${course.description}</p>
           <div class="course-meta">
             <span><i class="fas fa-clock"></i> ${course.duration}</span>
           </div>
-          <div class="course-fee">${course.fee}</div>
+          <div class="course-fee">₹${course.fee}</div>
           <button class="btn-enroll">
             <i class="fas fa-check-circle"></i> Enroll Now
           </button>
         </div>
       </div>
     </div>
-  `).join('');
+  `}).join('');
 
   initializeCourseInteraction(); // Re-initialize interactions after rendering courses
 }
 
 //==================== LOAD CATEGORIES ====================
 export async function loadCategories() {
-    try {
-        const response = await fetch("http://localhost:5000/categories");
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const categories = await response.json();
-        document.querySelectorAll(".category-dropdown").forEach(select => {
-        populateCategorySelect(select.id, categories);
-        });
-    } catch (error) {
-        console.error("Error loading categories:", error);
-        showModal("Error loading categories. Please refresh the page.", "danger");
+  try {
+    const response = await fetch(`${config.API_URL}/categories`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    const categories = await response.json();
+    document.querySelectorAll(".category-dropdown").forEach(select => {
+      // This includes the category dropdown cloned into the Edit Course modal.
+      populateCategorySelect(select, categories);
+    });
+  } catch (error) {
+    console.error("Error loading categories:", error);
+    showModal("Error loading categories. Please refresh the page.", "danger");
+  }
 }
 // ==================== POPULATE CATEGORY SELECT ====================
- function populateCategorySelect(selectId, categories) {
-    const categorySelect = document.getElementById(selectId);
-    if (!categorySelect) return;
+function populateCategorySelect(categorySelect, categories) {
+  if (!categorySelect) return;
 
-    categorySelect.innerHTML = '<option value="">Select a category</option>';
-    categories.forEach(category => {
-        const option = document.createElement("option");
-        option.value = category.id;
-        option.textContent = category.name;
-        categorySelect.appendChild(option);
-    });
+  categorySelect.innerHTML = '<option value="">Select a category</option>';
+  categories.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category.id;
+    option.textContent = category.name;
+    categorySelect.appendChild(option);
+  });
 }
 function initializeCourseInteraction() {
-    // Re-initialize enroll buttons and animations for dynamically loaded courses
+  // Re-initialize enroll buttons and animations for dynamically loaded courses
   initializeEnrollButtons();
   initializeScrollReveal();
 }
@@ -109,7 +117,7 @@ function initializeEnrollButtons() {
   const enrollButtons = document.querySelectorAll('.btn-enroll');
 
   enrollButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
+    button.addEventListener('click', function (e) {
       e.preventDefault();
       const courseName = this.closest('.course-card')?.querySelector('.course-title')?.textContent;
 

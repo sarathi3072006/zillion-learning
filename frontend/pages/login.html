@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="login page for Zillion Learning.">
+    <title>Login - Zillion Learning</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/login.css">
+
+    <!-- Custom JavaScript -->
+    <script type="module" src="../js/main.js"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🎓</text></svg>">
+</head>
+
+<body>
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="fas fa-graduation-cap"></i> Zillion<span>Learning</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="courses.html">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="faculty.html">Faculty</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="testimonials.html">Testimonials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="login.html">Login</a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <button class="dark-mode-toggle" aria-label="Toggle dark mode">🌙</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== LOGIN ==================== -->
+    <section id="loginSection" class="login-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="card p-4">
+                        <div class="card-body">
+
+                            <h2 class="text-center mb-3">Welcome Back</h2>
+                            <p class="text-center text-muted">
+                                Sign in to your Zillion Learning account.
+                            </p>
+
+                            <form id="loginForm" class="mt-4">
+
+                                <!-- Email -->
+                                <div class="mb-3 form-group">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" id="email" class="form-control" placeholder="Enter your email"
+                                        required>
+                                </div>
+
+                                <!-- Password -->
+                                <div class="mb-3 form-group">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" id="password" class="form-control"
+                                        placeholder="Enter your password" required>
+                                </div>
+
+                                <!-- Error Message -->
+                                <div id="loginError" class="text-danger mb-3" style="min-height:1.25rem;">
+                                </div>
+
+                                <!-- Login Button -->
+                                <div class="d-flex justify-content-center gap-2 mt-4">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        Sign In
+                                    </button>
+                                    <button type="button" id="showSignUpFormbtn" class="btn ShowSignUpFormbtn btn-primary w-100">
+                                        Sign up
+                                    </button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ==================== SIGN UP ==================== -->
+    <section id="signupSection" class="signup-section hidden">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="card p-4">
+                        <div class="card-body">
+
+                            <h2 class="text-center mb-3">Create Account</h2>
+
+                            <p class="text-center text-muted">
+                                Join Zillion Learning and start your learning journey.
+                            </p>
+
+                            <form id="signupForm" class="mt-4">
+
+                                <!-- Full Name -->
+                                <div class="mb-3 form-group">
+                                    <label for="signupName" class="form-label">Full Name</label>
+                                    <input type="text" id="signupName" name="name" class="form-control"
+                                        placeholder="Enter your full name" required>
+                                </div>
+
+                                <!-- Email -->
+                                <div class="mb-3 form-group">
+                                    <label for="signupEmail" class="form-label">Email Address</label>
+                                    <input type="email" id="signupEmail" name="email" class="form-control"
+                                        placeholder="Enter your email" autocomplete="email" required>
+                                </div>
+
+                                <!-- Password -->
+                                <div class="mb-3 form-group">
+                                    <label for="signupPassword" class="form-label">Password</label>
+                                    <input type="password" id="signupPassword" name="password" class="form-control"
+                                        placeholder="Create a password" autocomplete="new-password" required>
+                                </div>
+
+                                <!-- Confirm Password -->
+                                <div class="mb-3 form-group">
+                                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                    <input type="password" id="confirmPassword" name="confirmPassword"
+                                        class="form-control" placeholder="Confirm your password"
+                                        autocomplete="new-password" required>
+                                </div>
+
+                                <!-- Error Message -->
+                                <div id="signupError" class="text-danger mb-3" style="min-height:1.25rem;">
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="d-flex justify-content-center gap-2">
+
+                                    <button type="submit"  class="btn btn-primary">
+                                        Create Account
+                                    </button>
+
+                                    <button type="button" id="backToLoginBtn" class="btn btn-outline-primary">
+                                        Back to Login
+                                    </button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ <!-- ==================== SCROLL TO TOP BUTTON ==================== -->
+    <button id="scrollTopBtn" title="Go to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

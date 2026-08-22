@@ -1,5 +1,4 @@
 // ==================== LOADING ANIMATION ====================
-// ==================== LOADING ANIMATION ====================
 export function showLoadingAnimation(btn, loadingText = 'Loading...') {
   if (btn) {
     btn.disabled = true;
@@ -39,7 +38,7 @@ export function showModal(message, type = 'info') {
 export function initializeScrollReveal() {
   const elements = document.querySelectorAll('.course-card, .faculty-card, .feature-box, .testimonial-card');
 
-  const observer = new IntersectionObserver(function(entries) {
+  const observer = new IntersectionObserver(function (entries) {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';

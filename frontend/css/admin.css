@@ -40,6 +40,7 @@ body.dark-mode #adminContent .card-header,
 body.dark-mode #adminContent .card-body {
   background-color: var(--surface-color) !important;
 }
+
 /* Dark Mode - Admin Content Boxes */
 body.dark-mode #adminContent .bg-white {
   background-color: var(--surface-color) !important;
@@ -52,6 +53,7 @@ body.dark-mode #adminContent h5 {
 body.dark-mode #adminContent .text-muted {
   color: var(--text-light) !important;
 }
+
 /* Admin Dashboard Navigation */
 #adminContent .nav-link {
   color: var(--text-dark) !important;
@@ -63,6 +65,7 @@ body.dark-mode #adminContent .text-muted {
   background-color: var(--primary-light);
   color: var(--primary-color) !important;
 }
+
 body.dark-mode #adminContent .nav-link:hover {
   color: var(--primary-color) !important;
 }
@@ -81,36 +84,59 @@ body.dark-mode #adminContent .nav-link.active {
   background-color: var(--primary-color) !important;
   color: white !important;
 }
+/* for Hidden toggle */
 .hidden {
   display: none;
 }
 
 /* Dark Mode - Modal Styles */
 body.dark-mode .modal-content {
-    background-color: #1e1e1e;
-    color: #fff;
-    border: 1px solid #444;
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 1px solid #444;
 }
 
 body.dark-mode .modal-header,
 body.dark-mode .modal-footer {
-    border-color: #444;
+  border-color: #444;
 }
 
 body.dark-mode .modal-title {
-    color: white;
+  color: white;
 }
 
 body.dark-mode .modal .form-control {
-    background-color: #2b2b2b;
-    color: white;
-    border-color: #555;
+  background-color: #2b2b2b;
+  color: white;
+  border-color: #555;
 }
 
 body.dark-mode .modal .form-control::placeholder {
-    color: #aaa;
+  color: #aaa;
 }
 
 body.dark-mode .btn-close {
-    filter: invert(1);
+  filter: invert(1);
+}
+
+
+body.dark-mode  table,
+body.dark-mode  thead,
+body.dark-mode  tbody,
+body.dark-mode  th,
+body.dark-mode  td {
+    background-color: var(--dark-surface) !important;
+    color: var(--text-white) !important;
+    border-color: var(--dark-border) !important;
+}
+/* form-text dark mode css */
+body.dark-mode .form-text{
+  color: var(--dark-muted) !important
+}
+/*===================== COURSE IMAGE STYLES TO FIT MANAGECOURSE TABLE==================== */
+.course-image {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
 }
