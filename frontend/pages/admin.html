@@ -56,7 +56,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html">Contact</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" id="login">
                         <a class="nav-link active" href="login.html">Login</a>
                     </li>
                     <li class="nav-item ms-2">
@@ -68,7 +68,7 @@
     </nav>
 
 
-    <!-- ==================== ADMIN CONTENT PLACEHOLDER ==================== -->
+    <!-- ==================== ADMIN CONTENT PLACEHOLDER =================== = -->
     <section id="adminContent" class="section-light" style=" padding: 60px 0;">
         <div class="container">
             <div class="card p-4 shadow-sm">
@@ -83,6 +83,7 @@
                         <a class="nav-link" href="#" id="coursesTab">Courses</a>
                         <a class="nav-link" href="#" id="settingsTab">Settings</a>
                     </nav>
+                    <hr>
                     <!-- Overview Section -->
                     <div id="overviewSection">
                         <div class="row">
@@ -109,7 +110,7 @@
                             + Add Course
                         </button>
                         <!-- Manage Courses btn -->
-                        <button id="manageCoursesBtn" class="btn btn-primary mb-3 ms-2">
+                        <button id="manageCoursesBtn" class="btn btn-primary mb-3">
                             📋 Manage Existing Courses
                         </button>
                         <!--
@@ -232,6 +233,17 @@
                             <!-- =================================================================================================================== -->
                         </div>
                         <div id="manageCoursesSec" class="hidden">
+                            <div  id="categoryDelete">
+                                <h4 class="mb-4">Manage Category</h4>
+                            
+                                    <select id="categorySelectDlt" name="categoryId" class="category-dropdown" required>
+                                        <option value="">Select a category</option>
+                                    </select>
+                                
+                                <button type="button" class="btn btn-danger btn-sm ms-2 mt-2 mt-sm-0" id="deleteCategoryBtn">Delete Category</button>
+                                <p class="text-muted mt-2">⚠️ Deleting a category will also delete all courses under that category. This action cannot be undone.<br>
+                                    Tip: If you want to keep the courses, please reassign them to a different category before deleting.</p>
+                            </div>
                             <h4 class="mb-4">Manage Courses</h4>
                             <div class="table-responsive">
                                 <table class="table table-hover align-middle">
@@ -252,6 +264,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            
                         </div>
 
                         <!-- Edit Course Modal; the add-course form above remains independent. -->

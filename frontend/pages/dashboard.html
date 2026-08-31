@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Contact Zillion Learning - Get in touch with our support team for any inquiries.">
-    <title>Contact Us - Zillion Learning</title>
+    <title>Dashboard - Zillion Learning</title>
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,6 +15,7 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
 
     <!-- Custom JavaScript -->
     <script type="module" src="../js/main.js"></script>
@@ -54,7 +55,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="contact.html">Contact</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" id="login">
                         <a class="nav-link" href="login.html">Login</a>
                     </li>
                     <li class="nav-item ms-2">
@@ -64,9 +65,118 @@
             </div>
         </div>
     </nav>
+    <section id="dashboardSec" class="section-light py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="card border-1 shadow-lg rounded-4 overflow-hidden">
+                        <div class="card-body p-4 p-lg-5">
+                            <div class="row align-items-center g-4">
+                                <div class="col-md-auto text-center text-md-start">
+                                    <img id="pfp" class="rounded-circle border border-4 border-primary-subtle shadow-sm"
+                                        alt="Profile" width="110" height="110" style="object-fit: cover;">
+                                </div>
+                                <div class="col-md">
+                                    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                                        <div>
+                                            <p class="text-uppercase text-primary fw-semibold mb-2 letter-spacing-1">Welcome back!</p>
+                                            <h2 id="name" class="mb-2">Loading...</h2>
+                                            <h5 id="email" class="text-muted mb-2"></h5>
+                                            <span id="role" class="badge rounded-pill bg-primary text-primary-emphasis px-3 py-2 fs-6">
+                                                User
+                                            </span>
+                                        </div>
+                                        <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                                        <button class="btn btn-primary btn-lg rounded-pill px-4">
+                                            <i class="fas fa-edit me-2"></i>Edit Profile
+                                        </button>
+                                        <a id="adminPanel" class="btn btn-primary btn-lg rounded-pill px-4 hidden" href="admin.html">
+                                            <i class="fas fa-cog me-2"></i>Admin Panel
+                                        </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!--
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Enrolled Courses</h5>
+                                <span class="badge bg-success-subtle text-success-emphasis rounded-pill">12</span>
+                            </div>
+                            <p class="text-muted mb-0">Continue your learning journey with your active classes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Certificates</h5>
+                                <span class="badge bg-info-subtle text-info-emphasis rounded-pill">04</span>
+                            </div>
+                            <p class="text-muted mb-0">Your recently earned certifications are ready to view.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">Progress</h5>
+                                <span class="badge bg-warning-subtle text-warning-emphasis rounded-pill">72%</span>
+                            </div>
+                            <p class="text-muted mb-0">You are progressing well across your selected learning path.</p>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">Recent Activity</h4>
+                                <a href="#" class="btn btn-outline-primary btn-sm rounded-pill">View all</a>
+                            </div>
+
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item px-0 py-3 d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h6 class="mb-1">Frontend Development Bootcamp</h6>
+                                        <small class="text-muted">Completed lesson 8</small>
+                                    </div>
+                                    <span class="badge bg-success-subtle text-success-emphasis">Completed</span>
+                                </div>
+                                <div class="list-group-item px-0 py-3 d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h6 class="mb-1">UI/UX Design Basics</h6>
+                                        <small class="text-muted">New assignment uploaded</small>
+                                    </div>
+                                    <span class="badge bg-primary-subtle text-primary-emphasis">New</span>
+                                </div>
+                                <div class="list-group-item px-0 py-3 d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <h6 class="mb-1">Python for Beginners</h6>
+                                        <small class="text-muted">Quiz result: 88%</small>
+                                    </div>
+                                    <span class="badge bg-warning-subtle text-warning-emphasis">Review</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+    </section>
 
 
-    
 
     <!-- ==================== SCROLL TO TOP BUTTON ==================== -->
     <button id="scrollTopBtn" title="Go to top">

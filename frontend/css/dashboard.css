@@ -1,0 +1,22 @@
+#dashboardSec img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#dashboardSec img {
+    border: 2px solid #ffffff;
+}
+body.dark-mode #dashboardSec img {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+body.dark-mode #dashboardSec,
+body.dark-mode #dashboardSec .card,
+body.dark-mode #dashboardSec .card-header,
+body.dark-mode #dashboardSec .card-body {
+  background-color: var(--surface-color) !important;
+}

@@ -18,6 +18,7 @@ function initAdmin() {
     initializeImagePreview();
     initializeAddCourse();
     initializeAddCategory();
+    initializeDeleteCategory();
     initializeCourseDelete();
     initializeCourseEdit();
     initializeEditCourseForm();
@@ -159,6 +160,7 @@ function initializeAddCourse() {
 async function addCourse(e) {
     e.preventDefault();
     const { title, description, categoryId, duration, fee, image } = getCourseFormValues(e.currentTarget);
+    const token = localStorage.getItem("token");
     // Validation
     if (!title) {
         showModal("Please enter a course title.", "danger");
@@ -193,7 +195,10 @@ async function addCourse(e) {
     try {
         const response = await fetch(`${config.API_URL}/courses`, {
             method: "POST",
-            body: formData
+            body: formData,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         });
         const data = await response.json();
         if (!response.ok) {
@@ -225,6 +230,7 @@ async function addCategory(e) {
 
     const newCategory = document.getElementById("newCategoryInput").value.trim();
     const addCategoryBtn = document.getElementById("addCategoryBtn");
+    const token = localStorage.getItem("token");
     if (!newCategory) {
         showModal("Please enter a category name.", "danger");
         return;
@@ -235,7 +241,8 @@ async function addCategory(e) {
         const response = await fetch(`${config.API_URL}/categories`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({ name: newCategory })
 
@@ -265,6 +272,42 @@ async function addCategory(e) {
         addCategoryBtn.textContent = "Add Category";
     }
 }
+// ==================== INITIALIZE DELETE CATEGORY ====================
+function initializeDeleteCategory() {
+    document
+        .getElementById("categoryDelete")
+        .querySelector("button")
+        .addEventListener("click", deleteCategory);
+}
+// ==================== DELETE CATEGORY ====================
+async function deleteCategory() {
+    const categoryId = parseInt(document.getElementById("categorySelectDlt").value, 10);
+    const token = localStorage.getItem("token");
+    if (!categoryId) {
+        showModal("Please select a category first.", "danger");
+        return;
+    }
+    if (!confirm("Are you sure you want to delete this category?")) return;
+    try {
+        const response = await fetch(`${config.API_URL}/categories/${categoryId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.error || "Failed to delete category.");
+        }
+        showModal("Category deleted successfully!", "success");
+        await loadCategories(); // Refresh the category list after deletion
+        await loadcourses(); // Refresh the course list table after deletion
+    }
+    catch (error) {
+        console.error(error);
+        showModal(error.message, "danger");
+    }
+}
 // ==================== LOAD COURSES BEFORE RENDERING ====================
 async function loadcourses() {
     try {
@@ -286,22 +329,23 @@ function rendercoursetable(courses) {
     courses.forEach(course => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td><img
-                src="${config.API_URL}/uploads/course-images/${course.image}"
-                alt="${course.title}"
-                class="course-image">
-            </td>
-            <td>${course.title}</td>
-            <td>${course.description}</td>
-            <td>${course.category.name}</td>
-            <td>${course.duration}</td>
-            <td>₹${course.fee}</td>
-            <td>
-                <button class="btn btn-sm btn-warning edit-course" data-id="${course.id}">Edit</button>
-                <button class="btn btn-sm btn-danger delete-course" data-id="${course.id}">Delete</button>
-            </td>
-        `;
+            <td class="course-image-cell"><img
+            src="${config.API_URL}/uploads/course-images/${course.image}"
+            alt="${course.title}"
+            class="course-image">
+        </td>
+        <td data-label="Title">${course.title}</td>
+        <td data-label="Description">${course.description}</td>
+        <td data-label="Category">${course.category.name}</td>
+        <td data-label="Duration">${course.duration}</td>
+        <td data-label="Fee">₹${course.fee}</td>
+        <td class="course-actions-cell">
+            <button class="btn btn-sm btn-warning edit-course" data-id="${course.id}">Edit</button>
+            <button class="btn btn-sm btn-danger delete-course" data-id="${course.id}">Delete</button>
+        </td>
+    `;
         coursesTableBody.appendChild(row);
+        
     });
 }
 //==================== INITIALIZE COURSE DELETE ====================
@@ -318,10 +362,14 @@ function initializeCourseDelete() {
 }
 //==================== DELETE COURSE ====================
 async function deleteCourse(courseId) {
+    const token = localStorage.getItem("token");
     if (!confirm("Are you sure you want to delete this course?")) return;
     try {
         const response = await fetch(`${config.API_URL}/courses/${courseId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         });
         if (!response.ok) {
             const data = await response.json();
@@ -382,7 +430,7 @@ async function updateCourse(e) {
     if (!editingCourseId) return;
 
     const { title, description, categoryId, duration, fee, image } = getCourseFormValues(e.currentTarget);
-
+    const token = localStorage.getItem("token");
     if (!title || !categoryId || !duration || !fee) {
         showModal("Please complete all required course fields.", "danger");
         return;
@@ -399,7 +447,10 @@ async function updateCourse(e) {
     try {
         const response = await fetch(`${config.API_URL}/courses/${editingCourseId}`, {
             method: "PUT",
-            body: formData
+            body: formData,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         });
         const data = await response.json();
         if (!response.ok) {

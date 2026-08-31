@@ -32,7 +32,7 @@ app.get("/courses", async (req, res) => {
     }
 });
 
-app.post("/courses",authenticateToken,authorizeRole,upload.single("image"), async (req, res) => {
+app.post("/courses", authenticateToken, authorizeRole, upload.single("image"), async (req, res) => {
     const { title, description, duration, fee } = req.body;
     const categoryId = parseInt(req.body.categoryId, 10);
     const image = req.file ? req.file.filename : null;
@@ -127,9 +127,31 @@ app.post("/categories", authenticateToken, authorizeRole, async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
+app.delete("/categories/:id", authenticateToken, authorizeRole, async (req, res) => {
+    const categoryId = parseInt(req.params.id, 10);
+    try {
+        const category = await prisma.category.findUnique({
+            where: { id: categoryId }
+        });
+        if (!category) {
+            return res.status(404).json({ error: "Category not found" });
+        }
+        const courseDeleted=await prisma.course.deleteMany({
+            where:{categoryId:categoryId}
+        })
+        const deletedCategory = await prisma.category.delete({
+            where: { id: categoryId }
+        });
+        
+        res.json({ message: "Category deleted successfully", category: deletedCategory,courseDeleted:courseDeleted.count });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 //==================== DELETE COURSE ENDPOINT ====================
-app.delete("/courses/:id",authenticateToken,authorizeRole, async (req, res) => {
+app.delete("/courses/:id", authenticateToken, authorizeRole, async (req, res) => {
     const courseId = parseInt(req.params.id, 10);
     try {
         const course = await prisma.course.findUnique({
@@ -213,7 +235,7 @@ app.post("/login", async (req, res) => {
                 expiresIn: "1h"
             }
         );
-        res.status(200).json({ message: "Login successful",token });
+        res.status(200).json({ message: "Login successful", token });
     }
     catch (error) {
         console.error(error);
@@ -221,6 +243,20 @@ app.post("/login", async (req, res) => {
     }
 });
 
+app.get("/me", authenticateToken, async (req, res) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.userId }, select: { name: true, email: true, role: true }
+        });
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        res.status(200).json( user );
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+})
 //================================================================================
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

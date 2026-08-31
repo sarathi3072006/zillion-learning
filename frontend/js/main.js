@@ -6,7 +6,8 @@
 import { loadCourses, initializeSearchFilter, loadCategories } from "./modules/courses.js";
 import { showLoadingAnimation, hideLoadingAnimation, showModal, initializeScrollReveal } from "./modules/ui.js";
 import { initializeLoginPage } from "./modules/login.js";
-import { initializeNavbarScrollEffect, initializeEventListeners } from "./modules/navbar.js";
+import { initializeNavbarScrollEffect, initializeEventListeners, initializeLoginNavbar } from "./modules/navbar.js";
+import { loadprofile } from "./modules/dashboard.js";
 // ==================== INITIALIZATION ====================
 function initApp() {
   //dark mode
@@ -23,6 +24,10 @@ function initApp() {
   //keyboard shortcuts
   initializeKeyboardShortcuts();
   //================ MODULE FUNCTIONS=================
+  // navbar specific functions
+  initializeNavbarScrollEffect();
+  initializeEventListeners();
+  initializeLoginNavbar();
   // course page specific functions
   if (document.getElementById('coursesContainer')) {
     loadCourses();
@@ -30,12 +35,14 @@ function initApp() {
     initializeSearchFilter();
   }
   // login page specific functions
-  if (document.getElementById('loginForm')&&document.getElementById('signupForm')) {
+  if (document.getElementById('loginForm') && document.getElementById('signupForm')) {
     initializeLoginPage();
   }
-  // navbar specific functions
-  initializeNavbarScrollEffect();
-  initializeEventListeners();
+  // dashboard specific functions
+  if (document.getElementById('dashboardSec')) {
+    loadprofile();
+  }
+
 }
 
 initApp();

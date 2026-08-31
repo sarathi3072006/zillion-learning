@@ -2,6 +2,13 @@
    zillion learning - Main CSS Stylesheet
    Modern Educational Website Design
    ===================================================== */
+   body,
+body * {
+    transition:
+        background-color 0.50s ease,
+        color 0.50s ease,
+        border-color 0.50s ease;
+}
 .hidden {
   display: none !important;
 }
@@ -43,6 +50,7 @@
   --transition-base: 0.3s ease;
   --hover-lift: -10px;
 }
+/* fonts */
 
 /* Dark Mode Variables - flip the palette, everything downstream inherits */
 body.dark-mode {
@@ -68,6 +76,21 @@ body.dark-mode {
 
 body.dark-mode .navbar {
   background: linear-gradient(135deg, #111 0%, #222 100%);
+}
+#login img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#login img {
+    border: 2px solid #ffffff;
+}
+
+body.dark-mode #login img {
+    border-color: #c2c0c0;
 }
 
 /* !important is required on the rules below: .bg-white, .card, .card-header,
