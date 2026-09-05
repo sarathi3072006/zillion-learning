@@ -1,5 +1,16 @@
 import config from "./config.js";
 
+export function initializeLogoutButton() {
+    const logoutButton = document.getElementById("logoutButton");
+
+    if (!logoutButton) return;
+
+    logoutButton.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+    });
+}
+
 export async function loadprofile() {
     const token = localStorage.getItem("token");
     const pfp = document.getElementById("pfp");

@@ -131,10 +131,36 @@ function initializeCourseSectionToggle() {
 // ==================== IMAGE PREVIEW ====================
 function initializeImagePreview() {
     const imageInput = document.querySelector("#courseForm [name='image']");
+    const dropZone = document.getElementById("imageDropZone");
 
-    if (!imageInput) return;
+    if (!imageInput || !dropZone) return;
 
     imageInput.addEventListener("change", previewImage);
+    ["dragenter", "dragover"].forEach(eventName => {
+        dropZone.addEventListener(eventName, event => {
+            event.preventDefault();
+            dropZone.classList.add("drag-over");
+        });
+    });
+    ["dragleave", "drop"].forEach(eventName => {
+        dropZone.addEventListener(eventName, event => {
+            event.preventDefault();
+            dropZone.classList.remove("drag-over");
+        });
+    });
+    dropZone.addEventListener("drop", event => {
+        const [file] = event.dataTransfer.files;
+        if (!file || !file.type.startsWith("image/")) 
+        {
+            showModal("Only image files are allowed.", "danger");
+            return;
+        }
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        imageInput.files = dataTransfer.files;
+        imageInput.dispatchEvent(new Event("change", { bubbles: true }));
+    });
 }
 
 function previewImage() {
@@ -293,7 +319,7 @@ async function deleteCategory() {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${token}`
-            }
+            } 
         });
         if (!response.ok) {
             const data = await response.json();

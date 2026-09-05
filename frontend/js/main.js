@@ -7,7 +7,7 @@ import { loadCourses, initializeSearchFilter, loadCategories } from "./modules/c
 import { showLoadingAnimation, hideLoadingAnimation, showModal, initializeScrollReveal } from "./modules/ui.js";
 import { initializeLoginPage } from "./modules/login.js";
 import { initializeNavbarScrollEffect, initializeEventListeners, initializeLoginNavbar } from "./modules/navbar.js";
-import { loadprofile } from "./modules/dashboard.js";
+import { loadprofile, initializeLogoutButton } from "./modules/dashboard.js";
 // ==================== INITIALIZATION ====================
 function initApp() {
   //dark mode
@@ -41,6 +41,7 @@ function initApp() {
   // dashboard specific functions
   if (document.getElementById('dashboardSec')) {
     loadprofile();
+    initializeLogoutButton();
   }
 
 }
@@ -57,16 +58,19 @@ function initializeDarkMode() {
 }
 
 function toggleDarkMode() {
-  document.body.classList.toggle('dark-mode');
-  localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+  const isDark = !document.documentElement.classList.contains('dark-mode');
+  document.documentElement.classList.toggle('dark-mode', isDark);
+  document.body.classList.toggle('dark-mode', isDark);
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  localStorage.setItem('darkMode', isDark);
   updateDarkModeIcon();
 }
 
 function loadDarkModePreference() {
-  const darkMode = localStorage.getItem('darkMode') === 'true';
-  if (darkMode) {
-    document.body.classList.add('dark-mode');
-  }
+  const theme = localStorage.getItem('theme');
+  const darkMode = theme ? theme === 'dark' : localStorage.getItem('darkMode') === 'true';
+  document.documentElement.classList.toggle('dark-mode', darkMode);
+  document.body.classList.toggle('dark-mode', darkMode);
   updateDarkModeIcon();
 }
 

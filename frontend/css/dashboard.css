@@ -9,14 +9,14 @@
 #dashboardSec img {
     border: 2px solid #ffffff;
 }
-body.dark-mode #dashboardSec img {
+html.dark-mode body #dashboardSec img {
     border: 2px solid var(--primary-color);
     box-shadow: 0 0 10px var(--primary-color);
 }
 
-body.dark-mode #dashboardSec,
-body.dark-mode #dashboardSec .card,
-body.dark-mode #dashboardSec .card-header,
-body.dark-mode #dashboardSec .card-body {
+html.dark-mode body #dashboardSec,
+html.dark-mode body #dashboardSec .card,
+html.dark-mode body #dashboardSec .card-header,
+html.dark-mode body #dashboardSec .card-body {
   background-color: var(--surface-color) !important;
 }

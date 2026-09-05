@@ -7,27 +7,27 @@
 
 
 /* Dark Mode - Admin Page Styles */
-body.dark-mode #adminLockScreen.admin-lock-screen {
+html.dark-mode body #adminLockScreen.admin-lock-screen {
   background: linear-gradient(135deg, #111 0%, #222 100%);
 }
 
-body.dark-mode #adminContent,
-body.dark-mode #adminContent .card,
-body.dark-mode #adminContent .card-header,
-body.dark-mode #adminContent .card-body {
+html.dark-mode body #adminContent,
+html.dark-mode body #adminContent .card,
+html.dark-mode body #adminContent .card-header,
+html.dark-mode body #adminContent .card-body {
   background-color: var(--surface-color) !important;
 }
 
 /* Dark Mode - Admin Content Boxes */
-body.dark-mode #adminContent .bg-white {
+html.dark-mode body #adminContent .bg-white {
   background-color: var(--surface-color) !important;
 }
 
-body.dark-mode #adminContent h5 {
+html.dark-mode body #adminContent h5 {
   color: var(--text-dark);
 }
 
-body.dark-mode #adminContent .text-muted {
+html.dark-mode body #adminContent .text-muted {
   color: var(--text-light) !important;
 }
 
@@ -43,7 +43,7 @@ body.dark-mode #adminContent .text-muted {
   color: var(--primary-color) !important;
 }
 
-body.dark-mode #adminContent .nav-link:hover {
+html.dark-mode body #adminContent .nav-link:hover {
   color: var(--primary-color) !important;
 }
 
@@ -53,11 +53,11 @@ body.dark-mode #adminContent .nav-link:hover {
 }
 
 /* Dark Mode - Admin Navigation */
-body.dark-mode #adminContent .nav-link {
+html.dark-mode body #adminContent .nav-link {
   color: var(--text-dark) !important;
 }
 
-body.dark-mode #adminContent .nav-link.active {
+html.dark-mode body #adminContent .nav-link.active {
   background-color: var(--primary-color) !important;
   color: white !important;
 }
@@ -67,55 +67,91 @@ body.dark-mode #adminContent .nav-link.active {
 }
 
 /* Dark Mode - Modal Styles */
-body.dark-mode .modal-content {
+html.dark-mode body .modal-content {
   background-color: #1e1e1e;
   color: #fff;
   border: 1px solid #444;
 }
 
-body.dark-mode .modal-header,
-body.dark-mode .modal-footer {
+html.dark-mode body .modal-header,
+html.dark-mode body .modal-footer {
   border-color: #444;
 }
 
-body.dark-mode .modal-title {
+html.dark-mode body .modal-title {
   color: white;
 }
 
-body.dark-mode .modal .form-control {
+html.dark-mode body .modal .form-control {
   background-color: #2b2b2b;
   color: white;
   border-color: #555;
 }
 
-body.dark-mode .modal .form-control::placeholder {
+html.dark-mode body .modal .form-control::placeholder {
   color: #aaa;
 }
 
-body.dark-mode .btn-close {
+html.dark-mode body .btn-close {
   filter: invert(1);
 }
 
 
-body.dark-mode  table,
-body.dark-mode  thead,
-body.dark-mode  tbody,
-body.dark-mode  th,
-body.dark-mode  td {
+html.dark-mode body  table,
+html.dark-mode body  thead,
+html.dark-mode body  tbody,
+html.dark-mode body  th,
+html.dark-mode body  td {
     background-color: var(--dark-surface) !important;
     color: var(--text-white) !important;
     border-color: var(--dark-border) !important;
 }
 
-body.dark-mode #adminContent hr {
+html.dark-mode body #adminContent hr {
     border-color: var(--dark-border);
     opacity: 1;
 }
 /* form-text dark mode css */
-body.dark-mode .form-text{
+html.dark-mode body .form-text{
   color: var(--dark-muted) !important
 
 }
+
+#imageDropZone {
+    background-color: #f8f9fa;
+    border-color: #ced4da;
+    color: #495057;
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#imageDropZone.drag-over {
+    border-color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.08);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+#imageDropZone input[type="file"] {
+    display: block;
+    width: 100%;
+    border: 0;
+    background: transparent !important;
+    box-shadow: none;
+    padding: 0.25rem;
+    color: inherit;
+}
+
+html.dark-mode body #imageDropZone {
+    background-color: #1f1f1f !important;
+    border-color: var(--dark-border, #444) !important;
+    color: var(--text-dark) !important;
+}
+
+html.dark-mode body #imageDropZone.drag-over {
+    border-color: #7ab8ff !important;
+    background-color: rgba(122, 184, 255, 0.12) !important;
+    box-shadow: 0 0 0 0.2rem rgba(122, 184, 255, 0.22);
+}
+
 /*===================== COURSE IMAGE STYLES TO FIT MANAGECOURSE TABLE==================== */
 .course-image {
     width: 80px;
